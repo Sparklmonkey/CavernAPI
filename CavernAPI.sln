@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PetBaseData", "PetBaseData", "{713406D1-7E24-49B9-B5E0-CCF1A9BE3E5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetBaseData.API", "PetBaseData.API\PetBaseData.API.csproj", "{1D81B7CA-A164-4B1B-BB1D-21433BFCB9A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetBaseData.API", "PetBaseData.API\PetBaseData.API.csproj", "{1D81B7CA-A164-4B1B-BB1D-21433BFCB9A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

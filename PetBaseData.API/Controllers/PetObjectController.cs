@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using PetBaseData.API.Entities;
 using PetBaseData.API.Repositories;
+using Realms.Sync;
 using System;
 using System.Collections.Generic;
 using System.Linq;

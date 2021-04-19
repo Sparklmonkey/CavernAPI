@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PetBaseData.API.Entities;
 using MongoDB.Driver;
+using Realms.Sync;
 
 namespace PetBaseData.API.Repositories
 {
@@ -16,19 +17,26 @@ namespace PetBaseData.API.Repositories
         {
             _context = context;
         }
-        
 
+
+        public async Task<string> DoesUserExist(string username, string password)
+        {
+            var app = App.Create("petcavern-apaxs");
+            await app.EmailPasswordAuth.RegisterUserAsync(username, password);
+            var user = await app.LogInAsync(Credentials.EmailPassword(username, password));
+            return user.AccessToken;
+        }
         public async Task<IEnumerable<PetObject>> GetPetObjects()
         {
             return await _context
-                            .petObjects
+                            .PetObjects
                             .Find(p => true)
                             .ToListAsync();
         }
         public async Task<PetObject> GetPetObjectById(string id)
         {
             return await _context
-                            .petObjects
+                            .PetObjects
                             .Find(p => p.Id == id)
                             .FirstOrDefaultAsync();
         }
@@ -37,7 +45,7 @@ namespace PetBaseData.API.Repositories
         {
             FilterDefinition<PetObject> filter = Builders<PetObject>.Filter.Eq(p => p.PetName, name);
             return await _context
-                            .petObjects
+                            .PetObjects
                             .Find(filter)
                             .ToListAsync();
         }
@@ -46,19 +54,19 @@ namespace PetBaseData.API.Repositories
         {
             FilterDefinition<PetObject> filter = Builders<PetObject>.Filter.Eq(p => p.PetGrade, petGrade);
             return await _context
-                            .petObjects
+                            .PetObjects
                             .Find(filter)
                             .ToListAsync();
         }
 
         public async Task CreatePetObject(PetObject petObject)
         {
-            await _context.petObjects.InsertOneAsync(petObject);
+            await _context.PetObjects.InsertOneAsync(petObject);
         }
 
         public async Task<bool> UpdatePetObject(PetObject petObject)
         {
-            var updateResult = await _context.petObjects.ReplaceOneAsync(filter: g => g.Id == petObject.Id, replacement: petObject);
+            var updateResult = await _context.PetObjects.ReplaceOneAsync(filter: g => g.Id == petObject.Id, replacement: petObject);
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
 
@@ -66,7 +74,7 @@ namespace PetBaseData.API.Repositories
         {
             FilterDefinition<PetObject> filter = Builders<PetObject>.Filter.Eq(p => p.Id, id);
             DeleteResult deleteResult = await _context
-                                                    .petObjects
+                                                    .PetObjects
                                                     .DeleteOneAsync(filter);
             return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
         }

@@ -1,19 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using PetBaseData.API.Data;
-using PetBaseData.API.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PetBaseData.API
+namespace UserDataAPI
 {
     public class Startup
     {
@@ -31,13 +30,8 @@ namespace PetBaseData.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PetBaseData.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserDataAPI", Version = "v1" });
             });
-
-            services.AddScoped<IPetContext, PetContext>();
-            services.AddScoped<IPetObjectRepository, PetObjectRepository>();
-            services.AddScoped<IUserDataContext, UserDataContext>();
-            services.AddScoped<IUserLoginRepository, UserLoginRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,8 +41,10 @@ namespace PetBaseData.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PetBaseData.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UserDataAPI v1"));
             }
+
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 

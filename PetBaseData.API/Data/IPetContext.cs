@@ -9,6 +9,6 @@ namespace PetBaseData.API.Data
 {
     public interface IPetContext
     {
-        IMongoCollection<PetObject> petObjects { get; }
+        IMongoCollection<PetObject> PetObjects { get; }
     }
 }

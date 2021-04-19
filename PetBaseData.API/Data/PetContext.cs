@@ -15,9 +15,9 @@ namespace PetBaseData.API.Data
             var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
             var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
 
-            petObjects = database.GetCollection<PetObject>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
-            PetObjectSeed.SeedData(petObjects);
+            PetObjects = database.GetCollection<PetObject>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
+            PetObjectSeed.SeedData(PetObjects);
         }
-        public IMongoCollection<PetObject> petObjects { get; }
+        public IMongoCollection<PetObject> PetObjects { get; }
     }
 }
