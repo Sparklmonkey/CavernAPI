@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace PetBaseData.API.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("v1/[controller]")]
     public class PetObjectController : ControllerBase
     {
         private readonly IPetObjectRepository _repository;

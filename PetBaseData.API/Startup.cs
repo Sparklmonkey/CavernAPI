@@ -32,6 +32,7 @@ namespace PetBaseData.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PetBaseData.API", Version = "v1" });
+                c.OperationFilter<AddRequiredHeaderParameter>();
             });
 
             services.AddScoped<IPetContext, PetContext>();

@@ -22,9 +22,6 @@ namespace PetBaseData.API.Data
         {
             UserData newUserData = new()
             {
-                Username = "",
-                Password = "",
-                SaltValue = "",
                 SavedDataId = ""
             };
             return newUserData;

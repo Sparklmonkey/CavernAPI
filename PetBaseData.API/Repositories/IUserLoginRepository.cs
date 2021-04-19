@@ -8,7 +8,9 @@ namespace PetBaseData.API.Repositories
 {
     public interface IUserLoginRepository
     {
-        Task<SavedData> RegisterUser(string username, string password);
-        Task<SavedData> LoginUser(string username, string password);
+        Task<LoginResponse> RegisterUser(string username, string password);
+        Task<LoginResponse> LoginUser(string username, string password);
+        Task<ErrorCases> UpdateSavedData(string playerId, SavedData savedData);
+        Task<ErrorCases> DeleteUserData(string username, string password, string playerId);
     }
 }
