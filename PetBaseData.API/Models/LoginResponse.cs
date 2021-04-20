@@ -1,5 +1,7 @@
 ﻿using System;
-namespace PetBaseData.API.Entities
+using PetBaseData.API.Entities;
+
+namespace PetBaseData.API.Models
 {
     public class LoginResponse
     {

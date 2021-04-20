@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using PetBaseData.API.Data;
 using PetBaseData.API.Entities;
+using PetBaseData.API.Models;
 using PetBaseData.API.Helpers;
 using Realms.Sync;
 using System;
@@ -23,40 +24,10 @@ namespace PetBaseData.API.Repositories
             _configuration = configuration;
         }
 
-        public async Task<ErrorCases> DeleteUserData(string username, string password, string playerId)
+        public async Task<LoginResponse> LoginUser(LoginRequest loginRequest)
         {
-            var hashPass = $"{password}{_configuration.GetValue<string>("Salt")}".Sha256();
-            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Id == playerId);
-            UserData userData = userAsyncCursor.FirstOrDefault();
-
-            if (userData == null)
-            {
-                return ErrorCases.UserDoesNotExist;
-            }
-
-            if (userData.Password != hashPass)
-            {
-                return ErrorCases.IncorrectPassword;
-            }
-
-            IAsyncCursor<SavedData> savedDataCursor = await _context.SavedDataCollection.FindAsync(g => g.Id == userData.SavedDataId);
-            SavedData savedData = savedDataCursor.FirstOrDefault();
-
-            if(userData.Username != username)
-            {
-                return ErrorCases.UserMismatch;
-            }
-
-            await _context.SavedDataCollection.DeleteOneAsync(q => q.Id == savedData.Id);
-            await _context.UserDataCollection.DeleteOneAsync(q => q.Id == userData.Id);
-
-            return ErrorCases.AllGood;
-        }
-
-        public async Task<LoginResponse> LoginUser(string username, string password)
-        {
-            var hashPass = $"{password}{_configuration.GetValue<string>("Salt")}".Sha256();
-            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Username == username);
+            var hashPass = $"{loginRequest.Password}{_configuration.GetValue<string>("Salt")}".Sha256();
+            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Username == loginRequest.Username);
             UserData userData = userAsyncCursor.FirstOrDefault();
 
             if(userData == null)
@@ -87,11 +58,11 @@ namespace PetBaseData.API.Repositories
             return returnValue;
         }
 
-        public async Task<LoginResponse> RegisterUser(string username, string password)
+        public async Task<LoginResponse> RegisterUser(LoginRequest loginRequest)
         {
 
-            var hashPass = $"{password}{_configuration.GetValue<string>("Salt")}".Sha256();
-            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Username == username);
+            var hashPass = $"{loginRequest.Password}{_configuration.GetValue<string>("Salt")}".Sha256();
+            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Username == loginRequest.Username);
 
             UserData userData = userAsyncCursor.FirstOrDefault();
 
@@ -104,15 +75,21 @@ namespace PetBaseData.API.Repositories
             }
 
             SavedData newSavedData = UserDataSeed.GetDefaultSavedData();
+            newSavedData.ListOfPets = _context.PetObjectCollection
+                                                                .Find(p => true)
+                                                                .ToEnumerable();
+
             await _context.SavedDataCollection.InsertOneAsync(newSavedData);
             UserData newUser = new()
             {
                 SavedDataId = newSavedData.Id,
-                Username = username,
-                Password = hashPass
+                Username = loginRequest.Username,
+                Password = hashPass,
+                EmailAddress = loginRequest.EmailAddress
             };
 
             await _context.UserDataCollection.InsertOneAsync(newUser);
+
 
             LoginResponse returnValue = new()
             {
@@ -123,18 +100,6 @@ namespace PetBaseData.API.Repositories
             return returnValue;
         }
 
-        public async Task<ErrorCases> UpdateSavedData(string playerId, SavedData savedData)
-        {
-            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Id == playerId);
-            UserData userData = userAsyncCursor.FirstOrDefault();
-
-            if (userData == null)
-            {
-                return ErrorCases.UserDoesNotExist;
-            }
-
-            var updateResult = await _context.SavedDataCollection.ReplaceOneAsync(filter: g => g.Id == userData.SavedDataId, replacement: savedData);
-            return ErrorCases.AllGood;
-        }
+        
     }
 }

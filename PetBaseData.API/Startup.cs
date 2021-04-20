@@ -39,6 +39,7 @@ namespace PetBaseData.API
             services.AddScoped<IPetObjectRepository, PetObjectRepository>();
             services.AddScoped<IUserDataContext, UserDataContext>();
             services.AddScoped<IUserLoginRepository, UserLoginRepository>();
+            services.AddScoped<IUserManagementRepository, UserManagementRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

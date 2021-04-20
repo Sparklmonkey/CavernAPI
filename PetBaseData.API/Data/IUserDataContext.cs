@@ -11,5 +11,6 @@ namespace PetBaseData.API.Data
     {
         IMongoCollection<UserData> UserDataCollection { get; }
         IMongoCollection<SavedData> SavedDataCollection { get; }
+        IMongoCollection<PetObject> PetObjectCollection { get; }
     }
 }

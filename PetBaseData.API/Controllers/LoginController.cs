@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PetBaseData.API.Entities;
+using PetBaseData.API.Models;
 using PetBaseData.API.Filters;
 using PetBaseData.API.Repositories;
 using System;
@@ -31,7 +31,7 @@ namespace PetBaseData.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         public async Task<ActionResult<LoginResponse>> RegisterUser([FromBody] LoginRequest loginRequest)
         {
-            return Ok(await _repository.RegisterUser(loginRequest.Username, loginRequest.Password));
+            return Ok(await _repository.RegisterUser(loginRequest));
         }
 
         [Route("login", Name = "Login")]
@@ -39,23 +39,8 @@ namespace PetBaseData.API.Controllers
         [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<LoginResponse>> LoginUser([FromBody] LoginRequest loginRequest)
         {
-            return Ok(await _repository.LoginUser(loginRequest.Username, loginRequest.Password));
+            return Ok(await _repository.LoginUser(loginRequest));
         }
 
-        [Route("save-data", Name = "Update")]
-        [HttpPut]
-        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<LoginResponse>> UpdateSavedData([FromBody] UpdateRequest updateRequest)
-        {
-            return Ok(await _repository.UpdateSavedData(updateRequest.PlayerId, updateRequest.SavedData));
-        }
-
-        [Route("delete-user", Name = "Delete")]
-        [HttpDelete]
-        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<LoginResponse>> DeleteUser([FromBody] DeleteRequest deleteRequest)
-        {
-            return Ok(await _repository.DeleteUserData(deleteRequest.Username, deleteRequest.Password, deleteRequest.PlayerId));
-        }
     }
 }

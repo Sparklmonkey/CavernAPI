@@ -1,4 +1,4 @@
-﻿using PetBaseData.API.Entities;
+﻿using PetBaseData.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,7 @@ namespace PetBaseData.API.Repositories
 {
     public interface IUserLoginRepository
     {
-        Task<LoginResponse> RegisterUser(string username, string password);
-        Task<LoginResponse> LoginUser(string username, string password);
-        Task<ErrorCases> UpdateSavedData(string playerId, SavedData savedData);
-        Task<ErrorCases> DeleteUserData(string username, string password, string playerId);
+        Task<LoginResponse> RegisterUser(LoginRequest loginRequest);
+        Task<LoginResponse> LoginUser(LoginRequest loginRequest);
     }
 }

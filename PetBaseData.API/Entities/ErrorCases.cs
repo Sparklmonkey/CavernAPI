@@ -7,6 +7,8 @@ namespace PetBaseData.API.Entities
         UserDoesNotExist,
         IncorrectPassword,
         AllGood,
-        UserMismatch
+        UserMismatch,
+        UnknownError,
+        IncorrectEmail
     }
 }

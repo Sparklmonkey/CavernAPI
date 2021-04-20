@@ -15,5 +15,6 @@ namespace PetBaseData.API.Entities
         public string Username { get; set; }
         public string Password { get; set; }
         public string SavedDataId { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

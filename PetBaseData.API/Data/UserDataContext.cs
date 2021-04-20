@@ -17,9 +17,11 @@ namespace PetBaseData.API.Data
 
             UserDataCollection = database.GetCollection<UserData>(configuration.GetValue<string>("DatabaseSettings:UserCollectionName"));
             SavedDataCollection = database.GetCollection<SavedData>(configuration.GetValue<string>("DatabaseSettings:SavedDataCollectionName"));
+            PetObjectCollection = database.GetCollection<PetObject>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
 
         }
         public IMongoCollection<UserData> UserDataCollection { get; }
         public IMongoCollection<SavedData> SavedDataCollection { get; }
+        public IMongoCollection<PetObject> PetObjectCollection { get; }
     }
 }
