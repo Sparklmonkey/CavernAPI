@@ -9,6 +9,9 @@ namespace PetBaseData.API.Entities
         AllGood,
         UserMismatch,
         UnknownError,
-        IncorrectEmail
+        IncorrectEmail,
+        OtpIncorrect,
+        OtpExpired,
+        AccountNotVerified
     }
 }

@@ -10,5 +10,7 @@ namespace PetBaseData.API.Repositories
     {
         Task<LoginResponse> RegisterUser(LoginRequest loginRequest);
         Task<LoginResponse> LoginUser(LoginRequest loginRequest);
+        Task<LoginResponse> ValidateUser(LoginRequest loginRequest);
+        Task<LoginResponse> ResendOtp(LoginRequest loginRequest);
     }
 }

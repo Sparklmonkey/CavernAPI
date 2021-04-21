@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using PetBaseData.API.Data;
 using PetBaseData.API.Repositories;
+using PetBaseData.API.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace PetBaseData.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PetBaseData.API", Version = "v1" });
                 c.OperationFilter<AddRequiredHeaderParameter>();
             });
-
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddScoped<IPetContext, PetContext>();
             services.AddScoped<IPetObjectRepository, PetObjectRepository>();
             services.AddScoped<IUserDataContext, UserDataContext>();
