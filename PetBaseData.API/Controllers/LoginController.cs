@@ -42,5 +42,13 @@ namespace PetBaseData.API.Controllers
             return Ok(await _repository.LoginUser(loginRequest));
         }
 
+        [Route("validate", Name = "Validate")]
+        [HttpPost]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<LoginResponse>> ValidateUser([FromBody] LoginRequest loginRequest)
+        {
+            return Ok(await _repository.ValidateUser(loginRequest));
+        }
+
     }
 }

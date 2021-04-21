@@ -78,7 +78,7 @@ namespace PetBaseData.API.Repositories
         public async Task<LoginResponse> RegisterUser(LoginRequest loginRequest)
         {
 
-            if (loginRequest.EmailAddress.IsValidEmail())
+            if (!loginRequest.EmailAddress.IsValidEmail())
             {
                 return new LoginResponse()
                 {
@@ -122,7 +122,18 @@ namespace PetBaseData.API.Repositories
 
             await _context.UserDataCollection.InsertOneAsync(newUser);
 
-            SendOtpEmail(OtpCode, userData.EmailAddress);
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.To.Add(MailboxAddress.Parse(loginRequest.EmailAddress));
+            email.Subject = "Pet Cavern Verification Code";
+            var builder = new BodyBuilder();
+
+            builder.HtmlBody = $"Use this code to verify your account: {OtpCode}";
+            email.Body = builder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.SendAsync(email);
 
             LoginResponse returnValue = new()
             {
@@ -260,10 +271,10 @@ namespace PetBaseData.API.Repositories
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(emailAddress));
-            email.Subject = $"Pet Cavern Verification Code: {OtpCode}";
+            email.Subject = "Pet Cavern Verification Code";
             var builder = new BodyBuilder();
 
-            builder.HtmlBody = "Use this code to verify your account";
+            builder.HtmlBody = $"Use this code to verify your account: {OtpCode}";
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
