@@ -243,6 +243,7 @@ namespace PetBaseData.API.Repositories
             }
 
             userData.EmailAddress = accountRequest.EmailAddress;
+            userData.IsVerified = false;
 
             var result = await _context.UserDataCollection.ReplaceOneAsync(p => p.Id == userData.Id, userData);
 
