@@ -30,11 +30,17 @@ namespace PetBaseData.API
         {
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(config =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PetBaseData.API", Version = "v1" });
-                c.OperationFilter<AddRequiredHeaderParameter>();
+                config.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Sparklmonkey PetCavern",
+                    Version = "v1"
+                });
+
+                config.OperationFilter<AddRequiredHeaderParameter>();
             });
+
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddScoped<IPetContext, PetContext>();
             services.AddScoped<IPetObjectRepository, PetObjectRepository>();
