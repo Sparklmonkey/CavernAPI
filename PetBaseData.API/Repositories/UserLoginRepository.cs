@@ -67,7 +67,7 @@ namespace PetBaseData.API.Repositories
 
             LoginResponse returnValue = new()
             {
-                PlayerData = savedDataCursor.SingleOrDefault().ToString(),
+                PlayerData = savedDataCursor.SingleOrDefault(),
                 PlayerId = userData.Id,
                 ErrorMessage = ErrorCases.AllGood
             };
@@ -218,7 +218,7 @@ namespace PetBaseData.API.Repositories
             {
                 return new LoginResponse
                 {
-                    PlayerData = savedDataCursor.SingleOrDefault().ToString(),
+                    PlayerData = savedDataCursor.SingleOrDefault(),
                     ErrorMessage = ErrorCases.AllGood
                 };
             }

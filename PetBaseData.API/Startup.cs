@@ -55,7 +55,10 @@ namespace PetBaseData.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
+                app.UseSwagger(c =>
+                {
+                    c.SerializeAsV2 = true;
+                });
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PetBaseData.API v1"));
             }
 

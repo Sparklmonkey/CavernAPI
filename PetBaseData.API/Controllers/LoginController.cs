@@ -50,7 +50,7 @@ namespace PetBaseData.API.Controllers
             return Ok(await _repository.ValidateUser(loginRequest));
         }
 
-        [Route("new-email", Name = "ChangeEmail")]
+        [Route("new-email", Name = "ChangeRegEmail")]
         [HttpPost]
         [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<LoginResponse>> ChangeEmailForRegistration([FromBody] LoginRequest loginRequest)
