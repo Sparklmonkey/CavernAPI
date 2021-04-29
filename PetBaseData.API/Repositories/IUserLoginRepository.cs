@@ -12,5 +12,6 @@ namespace PetBaseData.API.Repositories
         Task<LoginResponse> LoginUser(LoginRequest loginRequest);
         Task<LoginResponse> ValidateUser(LoginRequest loginRequest);
         Task<LoginResponse> ResendOtp(LoginRequest loginRequest);
+        Task<LoginResponse> ChangeEmail(LoginRequest loginRequest);
     }
 }

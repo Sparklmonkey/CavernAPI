@@ -50,5 +50,21 @@ namespace PetBaseData.API.Controllers
             return Ok(await _repository.ValidateUser(loginRequest));
         }
 
+        [Route("new-email", Name = "ChangeEmail")]
+        [HttpPost]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<LoginResponse>> ChangeEmailForRegistration([FromBody] LoginRequest loginRequest)
+        {
+            return Ok(await _repository.ChangeEmail(loginRequest));
+        }
+
+        [Route("resend-otp", Name = "ResendOtp")]
+        [HttpPost]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<LoginResponse>> ResendOtp([FromBody] LoginRequest loginRequest)
+        {
+            return Ok(await _repository.ResendOtp(loginRequest));
+        }
+
     }
 }

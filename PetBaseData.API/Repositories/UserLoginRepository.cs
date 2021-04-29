@@ -67,7 +67,7 @@ namespace PetBaseData.API.Repositories
 
             LoginResponse returnValue = new()
             {
-                PlayerData = savedDataCursor.SingleOrDefault(),
+                PlayerData = savedDataCursor.SingleOrDefault().ToString(),
                 PlayerId = userData.Id,
                 ErrorMessage = ErrorCases.AllGood
             };
@@ -137,7 +137,6 @@ namespace PetBaseData.API.Repositories
 
             LoginResponse returnValue = new()
             {
-                PlayerData = newSavedData,
                 PlayerId = newUser.Id,
                 ErrorMessage = ErrorCases.AllGood
             };
@@ -213,11 +212,13 @@ namespace PetBaseData.API.Repositories
             userData.IsVerified = true;
 
             var replaceResult = await _context.UserDataCollection.ReplaceOneAsync(p => p.Id == userData.Id, userData);
+            IAsyncCursor<SavedData> savedDataCursor = await _context.SavedDataCollection.FindAsync(g => g.Id == userData.SavedDataId);
 
-            if(replaceResult.IsAcknowledged && replaceResult.ModifiedCount > 0)
+            if (replaceResult.IsAcknowledged && replaceResult.ModifiedCount > 0)
             {
                 return new LoginResponse
                 {
+                    PlayerData = savedDataCursor.SingleOrDefault().ToString(),
                     ErrorMessage = ErrorCases.AllGood
                 };
             }
@@ -265,6 +266,58 @@ namespace PetBaseData.API.Repositories
                 ErrorMessage = ErrorCases.UnknownError
             };
         }
+
+        public async Task<LoginResponse> ChangeEmail(LoginRequest loginRequest)
+        {
+            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Username == loginRequest.Username);
+
+            UserData userData = userAsyncCursor.FirstOrDefault();
+
+            if (userData == null)
+            {
+                return new LoginResponse
+                {
+                    ErrorMessage = ErrorCases.UserMismatch
+                };
+            }
+            
+            if (!loginRequest.EmailAddress.IsValidEmail())
+            {
+                return new LoginResponse()
+                {
+                    ErrorMessage = ErrorCases.IncorrectEmail
+                };
+            }
+
+            userData.EmailAddress = loginRequest.EmailAddress;
+
+            Random generator = new Random();
+            string OtpCode = generator.Next(0, 1000000).ToString("D6");
+
+            SendOtpEmail(OtpCode, userData.EmailAddress);
+
+            userData.Otp = OtpCode;
+            userData.CodeGenerateTime = DateTime.Now.Ticks.ToString();
+
+            var replaceResult = await _context.UserDataCollection.ReplaceOneAsync(p => p.Id == userData.Id, userData);
+
+            if (replaceResult.IsAcknowledged && replaceResult.ModifiedCount > 0)
+            {
+                return new LoginResponse
+                {
+                    ErrorMessage = ErrorCases.AllGood
+                };
+            }
+
+            return new LoginResponse
+            {
+                ErrorMessage = ErrorCases.UnknownError
+            };
+        }
+
+
+
+
 
         private async void SendOtpEmail(string OtpCode, string emailAddress)
         {
