@@ -5,6 +5,8 @@ namespace PetBaseData.API.Models
 {
     public class AccountRequest
     {
+        public string playerId { get; set; }
+
         public string Username { get; set; }
         public string NewUsername { get; set; }
 

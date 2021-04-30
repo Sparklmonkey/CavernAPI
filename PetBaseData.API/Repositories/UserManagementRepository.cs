@@ -200,7 +200,7 @@ namespace PetBaseData.API.Repositories
         public async Task<AccountResponse> UpdateSavedData(AccountRequest accountRequest)
         {
             AccountResponse response = new AccountResponse();
-            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Username == accountRequest.Username);
+            IAsyncCursor<UserData> userAsyncCursor = await _context.UserDataCollection.FindAsync(p => p.Id == accountRequest.playerId);
             UserData userData = userAsyncCursor.FirstOrDefault();
 
             if (userData == null)
